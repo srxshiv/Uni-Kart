@@ -8,7 +8,7 @@ import sendVerificationEmail from '../utils/nodeMailer.js'
 
 const router = express.Router();
 
-router.get('/auth-check' , authenticateJWTUser , (req,res)=>{
+router.post('/auth-check' , authenticateJWTUser , (req,res)=>{
     res.status(200).json({message: 'Authorized' , fname : req.user.fname})
 })
 
@@ -39,7 +39,6 @@ router.post('/signup' , async(req,res)=>{
 
 router.post('/verification' , async(req,res)=>{
     const verifyUser = req.body ;
-    console.log(verifyUser)
     try{
         let userExist = await User.findOne({email: verifyUser.email})
         if(userExist){
@@ -52,7 +51,7 @@ router.post('/verification' , async(req,res)=>{
                 {$set : {verified: true ,verificationCode: null , verificationCodeExpires:null}},
                 {new: true}
             )
-            const token = jwt.sign({email: verifyUser.email , fname: verifyUser.fname} , jwtSecret)
+            const token = jwt.sign({email: verifyUser.email , fname: verifyUser.fname || ''} , jwtSecret)
             return res.status(200).json({message: "User verified successfully" , token })
             }else{
                 return res.status(400).json({message: "Invalid verification code"})
@@ -77,7 +76,7 @@ router.post('/login' , async (req,res)=>{
             let match = await compareHash(password , hashedPass)
             if(match) {
                 if(userExist.verified){
-                    const token = jwt.sign({email: userBody.email , fname: userBody.fname} , jwtSecret , {expiresIn: '1h'})
+                    const token = jwt.sign({email: userBody.email , fname: userExist.fname || ' '} , jwtSecret)
                     return res.json({message: "Logged in successfully" , token})
                 }else return res.status(403).json({message: "User not verified"})
             }

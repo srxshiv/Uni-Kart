@@ -43,6 +43,7 @@ function Signup() {
       if (response.status === 200) {
         console.log(response.data.message);
         localStorage.setItem('verification-email' , email)
+        localStorage.setItem('fname' , fname)
         navigate('/verification')
         setFname("");
         setLname("");

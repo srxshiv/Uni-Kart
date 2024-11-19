@@ -16,7 +16,6 @@ const transporter = nodemailer.createTransport({
       subject: "Verify your email address",
       text: `Please use the following verification code: ${verificationCode}`,
     };
-    console.log(mailOptions);
     try {
       await transporter.sendMail(mailOptions);
       console.log("Verification email sent successfully");

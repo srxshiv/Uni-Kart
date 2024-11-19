@@ -3,11 +3,12 @@ import useListings from "../utils/useListings";
 import { useRecoilValue } from "recoil";
 import { listingState } from "../store/listingState";
 import useLogout from "../utils/useLogout";
-
+import { useNavigate } from "react-router-dom";
 function Home(){
     useListings()
     const listingsObject = useRecoilValue(listingState);
     const logout = useLogout()
+    const navigate = useNavigate()
 
     if(listingsObject.isLoading){
         return <div>
@@ -15,7 +16,6 @@ function Home(){
         </div>
     }
     const listings = listingsObject.listings
-    console.log(listings[1])
     return <div>
         <button onClick={logout}>LOG OUT</button>
                 <ul>
@@ -37,7 +37,7 @@ function Home(){
                         <p>
                             <strong>Price:</strong> ${listing.price}
                         </p>
-                        <button>Buy</button>
+                        <button onClick={()=>navigate(`/home/${listing._id}`)}>Buy</button>
                     </li>
                 ))}
             </ul>

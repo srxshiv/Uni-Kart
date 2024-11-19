@@ -9,23 +9,22 @@ function Verification(){
     const navigate = useNavigate();
     const [otp, setOtp] = React.useState('')
     const email = localStorage.getItem('verification-email')
+    const fname = localStorage.getItem('fname')
   
     const handleChange = (event) => {
       setOtp(event.target.value)
     }
 
-    console.log(otp)
-    console.log(email)
-
     const handleSubmit= async() =>{
         const body = {
             verificationCode : otp , 
-            email
+            email , fname
           }
           const response = await axios.post(`${base_url}/user/verification` , body)
           if(response.status ===200){
             localStorage.setItem('unikart-auth' , response.data.token)
             localStorage.removeItem('verification-email')
+            localStorage.removeItem('fname')
             navigate('/home')
           }
           else{
