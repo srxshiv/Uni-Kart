@@ -22,7 +22,7 @@ function Verification(){
           }
           const response = await axios.post(`${base_url}/user/verification` , body)
           if(response.status ===200){
-            localStorage.setItem('unikart-auth' , response.data.token)
+            localStorage.setItem('unikart-auth' , `${response.data.token}`)
             localStorage.removeItem('verification-email')
             localStorage.removeItem('fname')
             navigate('/home')

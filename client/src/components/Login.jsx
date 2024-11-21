@@ -20,7 +20,7 @@ function Login(){
         try{
             const response = await axios.post(`${base_url}/user/login` , body)
             if(response.status===200){
-                localStorage.setItem('unikart-auth' , response.data.token)
+                localStorage.setItem('unikart-auth' , `${response.data.token}`)
                 navigate('/home')
             }if(response.status===411){
                 alert('wrong credentials')

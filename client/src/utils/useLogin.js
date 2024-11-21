@@ -13,7 +13,7 @@ export function useLogin() {
       try {
         const response = await axios.post(`${base_url}/user/auth-check`, {} ,{
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Beaerer ${token}`,
           },
         });
         if (response.status === 200) {

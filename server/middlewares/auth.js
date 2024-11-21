@@ -15,7 +15,7 @@ function authenticateJWTUser(req,res,next){
         })
     }
     else {
-        return res.json({message: 'Unauthorized'})
+        return res.status(400).json({message: 'error occured'})
     }
 }
 export {authenticateJWTUser} 

@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import userRouter from './routes/user.js'
 import dotenv from 'dotenv'
+import sellerRouter from './routes/seller.js'
 
 dotenv.config();
 
@@ -10,7 +11,8 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
-app.use('/user/' , userRouter)
+app.use('/user' , userRouter)
+app.use('/seller' , sellerRouter)
 
 const port = process.env.PORT 
 const jwtSecret = process.env.JWT_Secret

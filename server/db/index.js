@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const userSchema = new mongoose.Schema({
     fname : String , 
@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
         default : false
     } ,
     completedOrders : Number ,
+    userListings : [{type: mongoose.Schema.Types.ObjectId , ref : 'Listing' }] ,
     verificationCode : Number ,
     verificationCodeExpires : Date ,
     createdAt : {

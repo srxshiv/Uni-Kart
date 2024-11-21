@@ -13,7 +13,7 @@ function MainLanding() {
 
     if(user.isLoading){
         return <div>loading...</div>
-    }
+    } 
     if(user.fname){
         return <div>
             Hi {user.fname}

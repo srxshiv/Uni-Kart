@@ -120,25 +120,5 @@ router.get('/listings/:id' , authenticateJWTUser , async (req,res)=>{
     else return res.status(404).json({message: 'listing not found'})
 })
 
-router.post('/create-listing' , authenticateJWTUser , async (req,res)=>{
-   try{
-    const user = await User.findOne({email : req.user.email})
-    const sellerId = user._id
-    const listing = new Listing({...req.body , sellerId})
-    await listing.save()
-    return res.json({message: "listing created successfully" , listingId : listing._id})
-   }
-   catch (error){
-    return res.status(500).json({message:"Some error occured"})
-   }
-})
-
-router.put('/listings/:id' , authenticateJWTUser , async(req,res)=>{
-    const listingId = req.params.id ;
-    const listingUpdate = req.body ;
-    const listing = await Listing.findByIdAndUpdate(listingId , listingUpdate , {new : true})
-    if(listing) return res.json({message: " listing updated successfully"})
-    else return res.status(411).json({message: "listing cannot be updated"})
-})
 
 export default router
