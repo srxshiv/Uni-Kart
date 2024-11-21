@@ -52,6 +52,7 @@ function SellerHome(){
             <div key={listing._id}>
               <h3>{listing.title}</h3>
               <p>{listing.description}</p>
+              <button onClick={()=>{navigate(`/seller/update-listing/${listing._id}`)}}>Edit Listing</button>
             </div>
           ))
         ) : (

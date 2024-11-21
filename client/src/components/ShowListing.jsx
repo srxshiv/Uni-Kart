@@ -20,8 +20,8 @@ function ShowListing(){
             try{
                 const response = await axios.get(`${base_url}/user/listings/${params.id}` , config )
                 if(response.status===200){
-                    setListing(response.data.listing)
-                    console.log(response.data.listing)
+                    setListing(response.data)
+                    console.log(response.data)
                 }
                 if(response.status===404){
                     alert('listing not found')

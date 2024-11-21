@@ -115,7 +115,7 @@ router.get('/listings/:id' , authenticateJWTUser , async (req,res)=>{
     const listingId = req.params.id
     const listing = await Listing.findById(listingId).populate('sellerId' , 'fname lname college contact')
     if(listing) {
-        return res.json({listing})
+        return res.json(listing)
     }
     else return res.status(404).json({message: 'listing not found'})
 })

@@ -88,7 +88,6 @@ function CreateListing(){
         </form>
         <button type='submit' onClick={submitListing}>Submit</button>
     </div>
-
 }
 
 function CategorySelector(props){
