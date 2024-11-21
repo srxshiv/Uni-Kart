@@ -1,6 +1,7 @@
 import express from 'express'
 import { authenticateJWTUser } from '../middlewares/auth.js'
 import { User , Listing} from '../db/index.js'
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -40,5 +41,20 @@ router.put('/listings/:id' , authenticateJWTUser , async(req,res)=>{
     if(listing) return res.json({message: " listing updated successfully"})
     else return res.status(411).json({message: "listing cannot be updated"})
 })
+
+router.delete('/listings/:id', authenticateJWTUser, async (req, res) => {
+    const listingId = req.params.id;
+    try {
+      const listing = await Listing.findById(listingId);
+      if (!listing) {
+        return res.status(404).json({ message: "Listing not found" });
+      }
+      await Listing.deleteOne({ _id: listingId });
+      return res.status(200).json({ message: "Listing deleted successfully" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
 
 export default router

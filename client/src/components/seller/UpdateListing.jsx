@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useParams } from "react-router-dom";
+import DeleteListing from "./DeleteListing";
 
 function UpdateListing() {
     const params = useParams();
@@ -101,6 +102,7 @@ function UpdateListing() {
           <CategorySelector category={category} handleCategory={setCategory} />
           <button type="submit">Submit</button>
         </form>
+        <DeleteListing id = {params.id}/>
       </div>
     );
   }
