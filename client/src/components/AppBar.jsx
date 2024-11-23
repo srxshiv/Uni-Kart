@@ -30,15 +30,16 @@ function AppBar() {
   };
 
   return (
-    <div className="fixed top-0 w-full bg-white border-b border-zinc-200 z-50">
+    <div className="fixed top-0 w-full bg-[rgba(255,255,255,0.8)] border-b border-zinc-200 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div
-            className="text-2xl font-bold text-indigo-600 cursor-pointer"
+            className="text-3xl font-bold text-indigo-600 cursor-pointer"
             onClick={() => navigate("/")}
           >
             UniKart
           </div>
+
 
           <nav className="flex items-center gap-6">
             <button

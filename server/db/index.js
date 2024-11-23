@@ -33,7 +33,21 @@ const listingSchema = new mongoose.Schema({
     createadAt : {type : Date , default : Date.now}
 })
 
+const messageSchema = new mongoose.Schema({
+    senderId: {type: mongoose.Schema.Types.ObjectId , ref: 'User'},
+    receiverId: {type: mongoose.Schema.Types.ObjectId , ref: 'User'},
+    content: {
+      type: String,
+      required: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  });
+
 const User = mongoose.model('User' , userSchema)
 const Listing = mongoose.model('Listing' , listingSchema)
+const Messages = mongoose.model('Message' , messageSchema)
 
-export {User , Listing}
+export {User , Listing , Messages}
