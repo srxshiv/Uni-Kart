@@ -35,6 +35,7 @@ router.post('/create-listing' , authenticateJWTUser , async (req,res)=>{
 })
 
 router.put('/listings/:id' , authenticateJWTUser , async(req,res)=>{
+  console.log(req.params.id)
     const listingId = req.params.id ;
     const listingUpdate = req.body ;
     const listing = await Listing.findByIdAndUpdate(listingId , listingUpdate , {new : true})
@@ -56,5 +57,6 @@ router.delete('/listings/:id', authenticateJWTUser, async (req, res) => {
       return res.status(500).json({ message: "Internal Server Error" });
     }
   });
+
 
 export default router

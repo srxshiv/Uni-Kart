@@ -1,133 +1,149 @@
-import React from "react"
-import axios from "axios"
-import { base_url } from '../../App'
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { useParams } from "react-router-dom";
-import DeleteListing from "./DeleteListing";
+import React from "react";
+import axios from "axios";
+import { base_url } from '../../App';
+import { useParams, useNavigate } from "react-router-dom";
 
 function UpdateListing() {
     const params = useParams();
+    const navigate = useNavigate();
     const [name, setName] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [price, setPrice] = React.useState("");
     const [category, setCategory] = React.useState("Misc");
     const [negotiable, setNegotiable] = React.useState(false);
-    const [error, setError] = React.useState(false);
+    const [error, setError] = React.useState("");
     const [loading, setLoading] = React.useState(true);
   
     const token = localStorage.getItem("unikart-auth");
   
     React.useEffect(() => {
-      async function getListing() {
-        try {
-          const config = { headers: { Authorization: `Bearer ${token}` } };
-          const response = await axios.get(`${base_url}/user/listings/${params.id}`, config);
-          if (response.status === 200) {
-            setName(response.data.name || "");
-            console.log(response.data)
-            setDescription(response.data.description || "");
-            setPrice(response.data.price || "");
-            setCategory(response.data.category || "Misc");
-            setNegotiable(response.data.negotiable || false);
-          } else if (response.status === 404) {
-            alert("Listing not found");
-          }
-        } catch (error) {
-          console.error(error);
-          setError("Failed to fetch the listing");
-        } finally {
-          setLoading(false);
+        async function getListing() {
+            try {
+                const config = { headers: { Authorization: `Bearer ${token}` } };
+                const response = await axios.get(`${base_url}/user/listings/${params.id}`, config);
+                if (response.status === 200) {
+                    setName(response.data.name || "");
+                    setDescription(response.data.description || "");
+                    setPrice(response.data.price || "");
+                    setCategory(response.data.category || "Misc");
+                    setNegotiable(response.data.negotiable || false);
+                }
+            } catch (error) {
+                console.error(error);
+                setError("Failed to fetch the listing");
+            } finally {
+                setLoading(false);
+            }
         }
-      }
-
-      getListing();
+        getListing();
     }, [params.id, token]);
-  
-    const submitListing = async (event) => {
-      event.preventDefault();
-      const body = { name, description, price, category, negotiable };
-      try {
-        const config = { headers: { Authorization: `Bearer ${token}` } };
-        const response = await axios.put(`${base_url}/seller/listings/${params.id}`, body, config);
-  
-        if (response.status === 200) {
-          alert(response.data.message);
-          console.log(response.data.message);
-        } else {
-          setError(response.data?.message || "Something went wrong");
+
+    const handleDelete = async () => {
+        try {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            await axios.delete(`${base_url}/seller/listings/${params.id}`, config);
+            navigate('/seller/home');
+        } catch (error) {
+            setError("Failed to delete listing");
         }
-      } catch (err) {
-        setError(err.response?.data?.message || "Something went wrong");
-      }
     };
   
-    if (error) {
-      return <div>{error}</div>;
-    }
-  
+    const submitListing = async (event) => {
+        event.preventDefault();
+        const body = { name, description, price, category, negotiable };
+        try {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            const response = await axios.put(`${base_url}/seller/listings/${params.id}`, body, config);
+            if (response.status === 200) {
+                navigate('/seller/home');
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || "Something went wrong");
+        }
+    };
+
     if (loading) {
-      return <div>Loading...</div>;
+        return (
+            <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+                <div className="animate-pulse text-zinc-800">Loading...</div>
+            </div>
+        );
     }
-  
+
     return (
-      <div>
-        <form onSubmit={submitListing}>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Name"
-          />
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description"
-          />
-          <input
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder="Price"
-          />
-          <input
-            type="checkbox"
-            checked={negotiable} // Use `checked` instead of `value` for checkboxes
-            onChange={(e) => setNegotiable(e.target.checked)}
-          />
-          Negotiable
-          <CategorySelector category={category} handleCategory={setCategory} />
-          <button type="submit">Submit</button>
-        </form>
-        <DeleteListing id = {params.id}/>
-      </div>
+        <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 flex items-center justify-center px-4">
+            <div className="w-full max-w-md">
+                <div className="bg-white rounded-2xl shadow-xl p-8">
+                    <h2 className="text-3xl font-bold text-zinc-900 text-center mb-8">
+                        Update Listing
+                    </h2>
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg">
+                            {error}
+                        </div>
+                    )}
+                    <form onSubmit={submitListing} className="space-y-4">
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Listing Name"
+                            className="w-full px-4 py-3 rounded-lg bg-zinc-50 border border-zinc-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                        />
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Description"
+                            rows={4}
+                            className="w-full px-4 py-3 rounded-lg bg-zinc-50 border border-zinc-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                        />
+                        <input
+                            type="number"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder="Price"
+                            className="w-full px-4 py-3 rounded-lg bg-zinc-50 border border-zinc-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                        />
+                        <select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg bg-zinc-50 border border-zinc-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                        >
+                            <option value="Electronics">Electronics</option>
+                            <option value="Books">Books</option>
+                            <option value="Stationary">Stationary</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Misc">Misc</option>
+                        </select>
+                        <label className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                checked={negotiable}
+                                onChange={(e) => setNegotiable(e.target.checked)}
+                                className="w-4 h-4 text-indigo-600 border-zinc-300 rounded focus:ring-indigo-500"
+                            />
+                            <span className="text-zinc-700">Price is negotiable</span>
+                        </label>
+                        <div className="flex gap-4">
+                            <button
+                                type="submit"
+                                className="flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium"
+                            >
+                                Update Listing
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleDelete}
+                                className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
-  }
-  
-  function CategorySelector(props) {
-    return (
-      <div>
-        <FormControl fullWidth>
-          <InputLabel>Category</InputLabel>
-          <Select
-            id="category"
-            value={props.category}
-            label="Category"
-            onChange={(e) => props.handleCategory(e.target.value)}
-          >
-            <MenuItem value={"Electronics"}>Electronics</MenuItem>
-            <MenuItem value={"Books"}>Books</MenuItem>
-            <MenuItem value={"Stationary"}>Stationary</MenuItem>
-            <MenuItem value={"Furniture"}>Furniture</MenuItem>
-            <MenuItem value={"Misc"}>Misc</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-    );
-  }
-  
-  export default UpdateListing;
-  
+}
+
+export default UpdateListing;

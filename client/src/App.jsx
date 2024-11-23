@@ -9,12 +9,15 @@ import ShowListing from './components/ShowListing';
 import SellerHome from './components/seller/SellerHome';
 import CreateListing from './components/seller/CreateListing';
 import UpdateListing from './components/seller/UpdateListing';
+import AppBar from './components/AppBar'
 
 
 export const base_url = import.meta.env.VITE_BASE_URL
 
 export default function App(){
   return <Router>
+    <AppBar/>
+    <div className="pt-16"></div>
     <Routes>
       <Route path='/' element={<MainLanding/>}/>
       <Route path='/signup' element ={<Signup/>}/>
