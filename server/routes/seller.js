@@ -1,7 +1,9 @@
-import express from 'express'
+import express, { response } from 'express'
 import { authenticateJWTUser } from '../middlewares/auth.js'
 import { User , Listing} from '../db/index.js'
-import mongoose from 'mongoose';
+import { upload } from '../middlewares/multer.js';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import path from 'path'
 
 const router = express.Router();
 
@@ -18,19 +20,24 @@ router.get('/listings' , authenticateJWTUser , async (req,res)=>{
     }
 })
 
-router.post('/create-listing' , authenticateJWTUser , async (req,res)=>{
+router.post('/create-listing' , authenticateJWTUser , upload.array('images' , 4) , async (req,res)=>{
     const body = req.body
+    const images = req.files
    try{
     const user = await User.findOne({email : req.user.email})
     const sellerId = user._id
-    const listing = new Listing({...body , sellerId})
+    const imagesArray = Array.from(images)
+    const cloudResponses = await Promise.all(imagesArray.map((file)=>uploadOnCloudinary(file.path)))
+    const imageURls = cloudResponses.map((url)=>url)
+    const listing = new Listing({...body , sellerId , images : imageURls})
     await listing.save()
     user.userListings.push(listing._id)
     await user.save();
     return res.json({message: "listing created successfully" , listingId : listing._id})
    }
    catch (error){
-    return res.status(500).json({message:"Some error occured"})
+    console.log(" in create listing ErROR" + error)
+    return res.status(500).json(error)
    }
 })
 

@@ -8,20 +8,41 @@ function CreateListing() {
     const [price, setPrice] = React.useState('');
     const [category, setCategory] = React.useState('Misc');
     const [negotiable, setNegotiable] = React.useState(false);
+    const [selectedFiles, setSelectedFiles] = React.useState([]);
     const [error, setError] = React.useState('');
     const token = localStorage.getItem('unikart-auth');
 
-    const submitListing = async () => {
+    const handleFileChange = (e) => {
+        setSelectedFiles(e.target.files);
+    };
+
+    const submitListing = async (e) => {
+        e.preventDefault();
         if (!name || !description || !price) {
             setError('All fields except negotiable are required');
             return;
         }
-        
-        const body = { name, description, price, category, negotiable };
-        const config = { headers: { Authorization: `Bearer ${token}` } };
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('price', price);
+        formData.append('category', category);
+        formData.append('negotiable', negotiable);
+
+        // Append selected images to the form data
+        Array.from(selectedFiles).forEach((file) => formData.append('images', file));
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`,
+            },
+        };
 
         try {
-            const response = await axios.post(`${base_url}/seller/create-listing`, body, config);
+            console.log(formData)
+            const response = await axios.post(`${base_url}/seller/create-listing`, formData, config);
             if (response.status === 200) {
                 console.log(response.data.message);
                 setName('');
@@ -29,6 +50,7 @@ function CreateListing() {
                 setPrice('');
                 setCategory('Misc');
                 setNegotiable(false);
+                setSelectedFiles([]);
                 setError('');
             }
         } catch (err) {
@@ -49,6 +71,15 @@ function CreateListing() {
                         </div>
                     )}
                     <div className="space-y-4">
+                        <input
+                            type="file"
+                            placeholder="Listing Images"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            name="images"
+                            multiple
+                            className="w-full px-4 py-3 rounded-lg bg-zinc-50 border border-zinc-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                        />
                         <input
                             type="text"
                             value={name}
@@ -79,6 +110,8 @@ function CreateListing() {
                             <option value="Books">Books</option>
                             <option value="Stationary">Stationary</option>
                             <option value="Furniture">Furniture</option>
+                            <option value="Service">Service</option>
+                            <option value="Service">Food</option>
                             <option value="Misc">Misc</option>
                         </select>
                         <label className="flex items-center space-x-2">

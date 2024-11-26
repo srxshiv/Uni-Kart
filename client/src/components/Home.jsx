@@ -29,6 +29,11 @@ function Home() {
               key={index}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden border border-zinc-100"
             >
+              <img
+                        src={listing.images || "/default-image.png"}
+                        alt={listing.name}
+                        className="w-full h-96 object-scale-down" 
+                    />
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-zinc-900 mb-2">
                   {listing.name}
@@ -55,7 +60,7 @@ function Home() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-zinc-900">${listing.price}</span>
+                  <span className="text-2xl font-bold text-zinc-900">₹{listing.price}</span>
                   <button
                     onClick={() => navigate(`/home/${listing._id}`)}
                     className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200"

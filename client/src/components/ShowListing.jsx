@@ -47,9 +47,9 @@ function ShowListing() {
             <div className="max-w-3xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                     <img
-                        src={listing.image || "/default-image.png"}
+                        src={listing.images || "/default-image.png"}
                         alt={listing.name}
-                        className="w-full h-96 object-cover"
+                        className="w-full h-96 object-scale-down" 
                     />
                     <div className="p-8">
                         <h1 className="text-3xl font-bold text-zinc-900 mb-4">{listing.name}</h1>
@@ -58,7 +58,7 @@ function ShowListing() {
                         <div className="grid grid-cols-2 gap-6 mb-8">
                             <div>
                                 <h3 className="text-sm text-zinc-500 mb-1">Price</h3>
-                                <p className="text-2xl font-bold text-zinc-900">${listing.price}</p>
+                                <p className="text-2xl font-bold text-zinc-900">₹{listing.price}</p>
                             </div>
                             <div>
                                 <h3 className="text-sm text-zinc-500 mb-1">Category</h3>
