@@ -19,8 +19,16 @@ function Signup() {
   function handleContact(event) { return setContact(event.target.value); }
   function handleCollege(event) { return setCollege(event.target.value); }
 
+  function isEmailValid(email) {
+    return email.endsWith("@muj.manipal.edu");
+  }
+
   async function submitSignup(event) {
     event.preventDefault();
+    if (!isEmailValid(email)) {
+      alert("Please enter a valid MUJ email address ending with @muj.manipal.edu");
+      return;
+    }
     const body = { fname, lname, email, contact, password, college };
     try {
       const response = await axios.post(`${base_url}/user/signup`, body);
@@ -46,7 +54,7 @@ function Signup() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h2 className="text-3xl font-bold text-zinc-900 text-center mb-8">

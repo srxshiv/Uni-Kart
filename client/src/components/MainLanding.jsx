@@ -9,7 +9,7 @@ function MainLanding() {
 
   if (user.isLoading) {
     return (
-      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-200 flex items-center justify-center">
         <div className="animate-pulse text-zinc-800">Loading...</div>
       </div>
     );

@@ -71,7 +71,7 @@ function UpdateListing() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-zinc-50 to-zinc-100 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-xl p-8">
                     <h2 className="text-3xl font-bold text-zinc-900 text-center mb-8">

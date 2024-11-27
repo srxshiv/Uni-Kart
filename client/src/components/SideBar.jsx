@@ -9,13 +9,6 @@ function Sidebar() {
       <ul className="space-y-4">
         <li>
           <button 
-            onClick={() => navigate('/home')} 
-            className="w-full text-left text-lg font-medium hover:bg-indigo-600 py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-105">
-            Home
-          </button>
-        </li>
-        <li>
-          <button 
             onClick={() => navigate('/inbox')} 
             className="w-full text-left text-lg font-medium hover:bg-indigo-600 py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-105">
             Inbox

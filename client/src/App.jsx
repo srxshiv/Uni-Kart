@@ -10,26 +10,23 @@ import SellerHome from './components/seller/SellerHome';
 import CreateListing from './components/seller/CreateListing';
 import UpdateListing from './components/seller/UpdateListing';
 import AppBar from './components/AppBar'
+import { loginState } from './store/loginState';
+import { useRecoilValue } from 'recoil';
 import Sidebar from './components/SideBar';
 
 export const base_url = import.meta.env.VITE_BASE_URL
 
 export default function App() {
 
+  const login = useRecoilValue(loginState)
+
   return (
-    <div className="h-screen bg-gray-100">
+    <div className="h-max bg-yellow-100">
       <Router>
-        {/* AppBar fixed at the top */}
         <AppBar />
-
-        {/* Main layout container */}
-        <div className="flex pt-16">
-          {/* Sidebar fixed below the AppBar */}
-
-            <Sidebar />
-
-          {/* Main Content section */}
-          <div className="flex flex-col w-full pl-4 pr-4 py-6">
+        <div className="flex bg-gray-200 pt-16">
+           {login.fname && <Sidebar/>}
+          <div className="flex flex-col w-full pl-4 pr-4 py-4">
             <Routes>
               <Route path="/" element={<MainLanding />} />
               <Route path="/signup" element={<Signup />} />
