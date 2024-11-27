@@ -13,6 +13,3 @@ app.use(cors())
 
 
 
-app.listen(port , ()=>{
-    console.log(`message server listening on port ${port}`)
-})

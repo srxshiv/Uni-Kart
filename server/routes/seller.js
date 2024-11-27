@@ -3,7 +3,6 @@ import { authenticateJWTUser } from '../middlewares/auth.js'
 import { User , Listing} from '../db/index.js'
 import { upload } from '../middlewares/multer.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
-import path from 'path'
 
 const router = express.Router();
 
