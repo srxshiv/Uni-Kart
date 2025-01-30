@@ -4,7 +4,8 @@ export const loginState = atom({
     key: 'loginState' ,
     default : {
         isLoading : true ,
-        fname : null
+        fname : null ,
+        _id : null
     } 
 })
 

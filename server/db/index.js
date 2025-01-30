@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     fname : String , 
@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
         default : Date.now
     } ,
     college : String ,
+    conversations : [{type : mongoose.Schema.Types.ObjectId , ref : 'User'}]
 })
 
 const listingSchema = new mongoose.Schema({
@@ -46,8 +47,10 @@ const messageSchema = new mongoose.Schema({
     },
   });
 
+
+
 const User = mongoose.model('User' , userSchema)
 const Listing = mongoose.model('Listing' , listingSchema)
 const Messages = mongoose.model('Message' , messageSchema)
 
-export {User , Listing , Messages}
+export {User , Listing , Messages }

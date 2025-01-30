@@ -37,20 +37,20 @@ function SellerHome() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-200 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-pulse text-zinc-800">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 px-4 py-20 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white px-4 py-20 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-zinc-900">Your Listings</h1>
+          <h1 className="text-4xl font-bold text-[#3B1E54]">Your Listings</h1>
           <button
             onClick={() => navigate("/seller/create-listing")}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium"
+            className="bg-[#FF9D23] text-white px-6 py-3 rounded-lg hover:bg-[#F93827] transition-colors duration-200 font-medium"
           >
             Create New Listing
           </button>
@@ -65,7 +65,7 @@ function SellerHome() {
             {listings.map((listing) => (
               <div
                 key={listing._id}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden border border-zinc-100"
+                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden border border-[#D4BEE4]"
               >
                 <img
                   src={listing.images || "/default-image.png"}
@@ -73,7 +73,7 @@ function SellerHome() {
                   className="w-full h-96 object-scale-down"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-zinc-900 mb-2">
+                  <h3 className="text-xl font-semibold text-[#3B1E54] mb-2">
                     {listing.name}
                   </h3>
                   <p className="text-zinc-600 mb-4 line-clamp-2">
@@ -83,7 +83,7 @@ function SellerHome() {
                     onClick={() =>
                       navigate(`/seller/update-listing/${listing._id}`)
                     }
-                    className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200"
+                    className="w-full bg-[#FF9D23] text-white py-2 rounded-lg hover:bg-[#F93827] transition-colors duration-200"
                   >
                     Edit Listing
                   </button>

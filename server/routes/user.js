@@ -2,14 +2,14 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import { jwtSecret } from '../server.js'
 import { authenticateJWTUser } from '../middlewares/auth.js'
-import { User , Listing} from '../db/index.js'
+import { User , Listing , Messages} from '../db/index.js'
 import {hashPassword , compareHash} from '../utils/hashPassword.js'
 import sendVerificationEmail from '../utils/nodeMailer.js'
 
 const router = express.Router();
 
 router.post('/auth-check' , authenticateJWTUser , (req,res)=>{
-    res.status(200).json({message: 'Authorized' , fname : req.user.fname})
+    res.status(200).json({message: 'Authorized' , fname : req.user.fname , _id : req.user._id})
 })
 
 router.post('/signup' , async(req,res)=>{
@@ -51,7 +51,7 @@ router.post('/verification' , async(req,res)=>{
                 {$set : {verified: true ,verificationCode: null , verificationCodeExpires:null}},
                 {new: true}
             )
-            const token = jwt.sign({email: verifyUser.email , fname: verifyUser.fname || ''} , jwtSecret)
+            const token = jwt.sign({email: userExist.email , fname: userExist.fname , _id : userExist._id || ''} , jwtSecret)
             return res.status(200).json({message: "User verified successfully" , token })
             }else{
                 return res.status(400).json({message: "Invalid verification code"})
@@ -76,7 +76,7 @@ router.post('/login' , async (req,res)=>{
             let match = await compareHash(password , hashedPass)
             if(match) {
                 if(userExist.verified){
-                    const token = jwt.sign({email: userBody.email , fname: userExist.fname || ' '} , jwtSecret)
+                    const token = jwt.sign({email: userBody.email , fname: userExist.fname , _id: userExist._id || ' '} , jwtSecret)
                     return res.json({message: "Logged in successfully" , token})
                 }else return res.status(403).json({message: "User not verified"})
             }
@@ -120,5 +120,41 @@ router.get('/listings/:id' , authenticateJWTUser , async (req,res)=>{
     else return res.status(404).json({message: 'listing not found'})
 })
 
+router.get('/messages/:id' , authenticateJWTUser , async(req,res)=>{
+    const id = req.params.id
+    const userId1 = id.split('_')[0]
+    const userId2 = id.split('_')[1]
+
+    const messages = await Messages.find({
+        $or: [
+            { senderId: userId1, receiverId: userId2 },
+            { senderId: userId2, receiverId: userId1 }
+        ]
+    });
+
+    if(messages){
+        return res.json(messages)
+    }
+    else return res.json({message:"no previous messages found"})
+} )
+
+router.get('/inbox' , authenticateJWTUser , async (req,res)=>{
+    const id = req.user._id 
+    const user = await User.findById(id)
+    const conversations= user.conversations
+    const users = await Promise.all( conversations.map(async (id)=>{
+       return await User.findById(id)
+    }))
+    const convos = users.map((user)=>{
+        return {
+            fname : user.fname ,
+            profileImageLink : user.profileImageLink ,
+            _id : user._id
+        }
+    })
+    res.json({convos , id})
+})
+
 
 export default router
+

@@ -40,29 +40,29 @@ function Verification() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-white flex items-center justify-center px-4">
             <div className="w-full max-w-md">
-                <div className="bg-white rounded-2xl shadow-xl p-8">
-                    <h2 className="text-3xl font-bold text-zinc-900 text-center mb-8">
+                <div className="bg-white rounded-2xl shadow-xl p-8 border border-orange-400">
+                    <h2 className="text-3xl font-bold text-orange-600 text-center mb-8">
                         Verify Your Email
                     </h2>
                     <div className="space-y-6">
                         <div>
-                            <label className="block text-sm font-medium text-zinc-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-600 mb-2">
                                 Enter Verification Code
                             </label>
                             <input
                                 type="text"
                                 value={otp}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-lg bg-zinc-50 border border-zinc-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all duration-200"
                                 placeholder="Enter OTP"
                             />
                         </div>
                         <button
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-200 font-medium disabled:bg-indigo-300"
+                            className="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-500 transition-colors duration-200 font-medium disabled:bg-orange-300"
                         >
                             {loading ? "Verifying..." : "Verify Email"}
                         </button>
